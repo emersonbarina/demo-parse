@@ -1,0 +1,10 @@
+{
+  "applications": {
+    "_default": {
+      "link": "demo-parse"
+    },
+    "demo-parse": {
+      "applicationId": "nsaxhYGyCNPmn1fOkWiwTSMTaxKY7rN1R8YyebVu"
+    }
+  }
+}
