@@ -8,6 +8,8 @@ Parse.Cloud.define("hello", (request) => {
 
 // Create fuction
 Parse.Cloud.define("create-product", async (request) => {
+    if(request.user == null) throw "Usuário não autênticado.";
+
 	const stock = request.params.stock;
 	if(stock == null || stock > 999)  throw "Quantidade inválida";
 	if(request.params.brandId == null) throw "Marca Inválida";
@@ -22,6 +24,7 @@ Parse.Cloud.define("create-product", async (request) => {
 	product.set("stock", request.params.stock);
 	product.set("isSelling", true);
 	product.set("brand", brand);
+	product.set("createdBy", request.user);
 	const savedProduct = await product.save(null, { useMasterKey: true });
 	return savedProduct.id;
 });
@@ -77,6 +80,7 @@ Parse.Cloud.define("list-products", async (request) => {
 	//query.greaterThanOrEqualTo("price",90);
 	//query.lessThanOrEqualTo("price",110);
 	//query.ascending("stock");
+	query.equalTo("createdBy", request.user);
 	query.descending("stock");
 	query.limit(itemsPage);
 	query.skip(page * itemsPage);
@@ -106,6 +110,16 @@ Parse.Cloud.define("sign-up", async (req) => {
   user.set("city", req.params.city);
 
   const savedUser = await user.signUp(null, {useMasterKey: true});
-  return savedUser;
+  return savedUser.get("sessionToken");
 
 });
+
+Parse.Cloud.define("get-current-user", async (req) => {
+	return req.user;
+});
+
+Parse.Cloud.define("login", async (req) => {
+	const user = await Parse.User.logIn(req.params.email, req.params.password);
+	return user;
+});
+
