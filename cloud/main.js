@@ -22,7 +22,7 @@ Parse.Cloud.define("create-product", async (request) => {
 	product.set("stock", request.params.stock);
 	product.set("isSelling", true);
 	product.set("brand", brand);
-	const savedProduct = await product.save(null, { useMasterkey: true });
+	const savedProduct = await product.save(null, { useMasterKey: true });
 	return savedProduct.id;
 });
 
@@ -33,7 +33,7 @@ Parse.Cloud.define("change-price", async (request) => {
 	const product = new Product();
 	product.id = request.params.productId;
 	product.set("price", request.params.price);
-	const savedProduct = await product.save(null, { useMasterkey: true });
+	const savedProduct = await product.save(null, { useMasterKey: true });
 	return savedProduct.get("price");
 });
 
@@ -43,7 +43,7 @@ Parse.Cloud.define("delete-product", async (request) => {
 	const product = new Product();
 	product.id = request.params.productId;
 
-	await product.destroy({ useMasterkey: true });
+	await product.destroy({ useMasterKey: true });
 
 	return "Produto excluído com sucesso";
 });
@@ -53,7 +53,7 @@ Parse.Cloud.define("get-product", async (request) => {
 	
 	const query = new Parse.Query(Product);
 	query.include("brand");
-	const product = await query.get(request.params.productId, {useMasterkey: true});
+	const product = await query.get(request.params.productId, {useMasterKey: true});
 	
 	const json = product.toJSON();
 	return {
@@ -81,7 +81,7 @@ Parse.Cloud.define("list-products", async (request) => {
 	query.limit(itemsPage);
 	query.skip(page * itemsPage);
 
-	const products = await query.find({useMasterkey: true});
+	const products = await query.find({useMasterKey: true});
 	return products.map(function(p) {
 		p = p.toJSON();
 		return {
