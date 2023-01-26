@@ -73,6 +73,13 @@ Parse.Cloud.define("list-products", async (request) => {
 	query.skip(page * itemsPage);
 
 	const products = await query.find({useMasterkey: true});
-	return products;
+	return products.map(function(p) {
+		p = p.toJSON();
+		return {
+			name: p.name,
+			price: p.price,
+			stock: p.stock
+		}
+	});
 });
 
