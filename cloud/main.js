@@ -40,3 +40,12 @@ Parse.Cloud.define("delete-product", async (request) => {
 
 	return "Produto excluído com sucesso";
 });
+
+Parse.Cloud.define("get-product", async (request) => {
+	if(request.params.productId == null) throw "Produto inválido";
+	
+	const query = new Parse.Query(Product);
+	const product = await query.get(request.params.productId, {useMasterkey: true});
+	
+	return product;
+});
