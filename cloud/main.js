@@ -92,3 +92,20 @@ Parse.Cloud.define("list-products", async (request) => {
 	});
 });
 
+
+Parse.Cloud.define("sign-up", async (req) => {
+  if(req.params.email == null) throw "Email inválido";
+  if(req.params.password == null) throw "Password inválido";
+  if(req.params.name == null) throw "Nome inválido";
+
+  const user = new Parse.User();
+  user.set("username", req.params.email);
+  user.set("email", req.params.email);
+  user.set("password", req.params.password);
+  user.set("name", req.params.name);
+  user.set("city", req.params.city);
+
+  const savedUser = await user.signUp(null, {useMasterKey: true});
+  return savedUser;
+
+});
