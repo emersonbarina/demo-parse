@@ -47,13 +47,32 @@ Parse.Cloud.define("get-product", async (request) => {
 	const query = new Parse.Query(Product);
 	const product = await query.get(request.params.productId, {useMasterkey: true});
 	
-	//const json = product.toJSON();
+	const json = product.toJSON();
 	return {
-		name: product.get("name"),
-		price: product.get("price")
-		/*name: json.name,
+		//name: product.get("name"),
+		//price: product.get("price")
+		name: json.name,
 		price: json.price,
 		stock: json.stock,
-		isSelling: json.isSelling*/
+		isSelling: json.isSelling
 	};
 });
+
+Parse.Cloud.define("list-products", async (request) => {
+	const page = request.params.page;
+	const itemsPage = request.params.itemsPage;
+	const query = new Parse.Query(Product);
+	//query.greaterThan("price",100);
+	//query.lessThan("price",200);
+	//query.equalTo("isSelling", true);
+	//query.greaterThanOrEqualTo("price",90);
+	//query.lessThanOrEqualTo("price",110);
+	//query.ascending("stock");
+	query.descending("stock");
+	query.limit(itemsPage);
+	query.skip(page * itemsPage);
+
+	const products = await query.find({useMasterkey: true});
+	return products;
+});
+
