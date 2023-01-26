@@ -19,3 +19,24 @@ Parse.Cloud.define("create-product", async (request) => {
 	return savedProduct.id;
 });
 
+Parse.Cloud.define("change-price", async (request) => {
+	if(request.params.productId == null) throw "Produto inválido";
+	if(request.params.price == null) throw "Preço inválido";
+	
+	const product = new Product();
+	product.id = request.params.productId;
+	product.set("price", request.params.price);
+	const savedProduct = await product.save(null, { useMasterkey: true });
+	return savedProduct.get("price");
+});
+
+Parse.Cloud.define("delete-product", async (request) => {
+	if(request.params.productId == null) throw "Produto inválido";
+	
+	const product = new Product();
+	product.id = request.params.productId;
+
+	await product.destroy({ useMasterkey: true });
+
+	return "Produto excluído com sucesso";
+});
