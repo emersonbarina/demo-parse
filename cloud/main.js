@@ -47,11 +47,13 @@ Parse.Cloud.define("get-product", async (request) => {
 	const query = new Parse.Query(Product);
 	const product = await query.get(request.params.productId, {useMasterkey: true});
 	
-	const json = product.toJSON();
+	//const json = product.toJSON();
 	return {
-		name: json.name,
+		name: product.get("name"),
+		price: product.get("price")
+		/*name: json.name,
 		price: json.price,
 		stock: json.stock,
-		isSelling: json.isSelling
+		isSelling: json.isSelling*/
 	};
 });
